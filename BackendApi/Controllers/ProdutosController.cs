@@ -36,20 +36,36 @@ namespace BackendApi.Controllers
         [HttpPost]
         public ActionResult Post(Produto novoProduto)
         {
-            produtosService.Adicionar(novoProduto);
-            return Created();
+            try
+            {
+                produtosService.Adicionar(novoProduto);
+                return Created();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            
         }
 
         [HttpPut("{id}")]
         public ActionResult<Produto> Put(int id, Produto produtoAtualizado)
         {
-            var produto = produtosService.Atualizar(id, produtoAtualizado);
-            if(produto is null)
+            try
             {
-                return NotFound($"Produto com ID {id}não encontrado.");
-            }
+                var produto = produtosService.Atualizar(id, produtoAtualizado);
+                if (produto is null)
+                {
+                    return NotFound($"Produto com ID {id}não encontrado.");
+                }
 
-            return Ok(produto);
+                return Ok(produto);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+           
         }
 
         [HttpDelete("{id}")]
